@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1.1 (branches/2.1-6844; 2011-07-29T12:07:24+0000) JAXWS-RI/2.2.5 JAXWS/2.2. --><!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by TeaM DJiNN (TeaM DJiNN) --><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.unisoft/FNSNDSCAWS2/Response" targetNamespace="http://ws.unisoft/FNSNDSCAWS2/Response" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="ДатаТип">
+		<xs:annotation>
+			<xs:documentation>Дата в формате ДД.ММ.ГГГГ (01.01.1800 - 31.12.2099)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<!--xs:maxLength value="10"/-->
+			<!--xs:pattern value="(((0[1-9]{1}|[1-2]{1}[0-9]{1})\.(0[1-9]{1}|1[0-2]{1}))|((30)\.(01|0[3-9]{1}|1[0-2]{1}))|((31)\.(01|03|05|07|08|10|12)))\.(18[0-9]{2}|19[0-9]{2}|20[0-9]{2})"/-->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ИННТип">
+		<xs:annotation>
+			<xs:documentation>Идентификационный номер налогоплательщика</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<!--xs:maxLength value="12"/-->
+			<!--xs:pattern value="([0-9]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{10}"/-->
+			<!--xs:pattern value="([0-9]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{8}"/-->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="КППТип">
+		<xs:annotation>
+			<xs:documentation>Код причины постановки на учет (КПП)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<!--xs:maxLength value="9"/-->
+			<!--xs:pattern value="([0-9]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{7}"/-->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="NdsResponse2">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос о контрагентах</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NP" minOccurs="0" maxOccurs="10000">
+					<xs:annotation>
+						<xs:documentation>Сведения о контрагенте</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="INN" type="tns:ИННТип" use="required">
+							<xs:annotation>
+								<xs:documentation>ИНН</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="KPP" type="tns:КППТип" use="optional">
+							<xs:annotation>
+								<xs:documentation>КПП</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="DT" type="tns:ДатаТип" use="optional">
+							<xs:annotation>
+								<xs:documentation>Дата, на которую запрашиваются сведения</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="State" use="required">
+							<xs:annotation>
+								<xs:documentation>Состояние контрагента:		0 - ИНН+КПП+ДАТА+ Налогоплательщик зарегистрирован в ЕГРН и имел статус действующего в интервале ± 6 дней от даты запроса
+1 - ИНН+КПП+ДАТА- Налогоплательщик зарегистрирован в ЕГРН, но не имел статус действующего в интервале ± 6 дней от даты запроса 
+2 - ИНН+КПП+ Налогоплательщик зарегистрирован в ЕГРН (в запросе не указана дата)
+3 - ИНН+КПП- Несоотвествие КПП указанному в запросе ИНН (дата могла быть указана а могла и быть не указана)
+4 - ИНН- Налогоплательщик с указанным ИНН не зарегистрирован в ЕГПН (дата могла быть указана а могла и быть не указана)
+	</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<!--xs:length value="1"/-->
+									<xs:enumeration value="0"/>
+									<xs:enumeration value="1"/>
+									<xs:enumeration value="2"/>
+									<xs:enumeration value="3"/>
+									<xs:enumeration value="4"/>
+									<xs:enumeration value="5"/>
+									<xs:enumeration value="6"/>
+									<xs:enumeration value="7"/>
+									<xs:enumeration value="8"/>
+									<xs:enumeration value="9"/>
+									<xs:enumeration value="10"/>
+									<xs:enumeration value="11"/>
+									<xs:enumeration value="12"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="DTActUL" type="tns:ДатаТип" use="optional">
+				<xs:annotation>
+					<xs:documentation>Дата, на которую актуальны данные по ЮЛ, используемые для проверки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="DTActFL" type="tns:ДатаТип" use="optional">
+				<xs:annotation>
+					<xs:documentation>Дата, на которую актуальны данные по ИП, используемые для проверки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="errMsg">
+				<xs:annotation>
+					<xs:documentation>Сообщение об ошибке</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
